@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # Copyright (c) 2023 Mattie Behrens.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
