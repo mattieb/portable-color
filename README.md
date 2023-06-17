@@ -2,6 +2,8 @@
 
 This script fragment is designed to be included or sourced in your shell scripts, providing you the capability to output in bold and color to emphasize some of your output for humans.
 
+I wrote more about it in ["How and Why You Should Add Color to Your Scripts"](https://spin.atomicobject.com/2023/05/25/color-scripts/) at [Atomic Spin](https://spin.atomicobject.com/).
+
 See [the example script](./example) to see how to use it.
 
 ## Installation
