@@ -26,11 +26,16 @@
 # want to try color, we use "true" instead, which will always return success.
 
 color_on() {
-	test ! -z "${CLICOLOR_FORCE}" -a "${CLICOLOR_FORCE}" != 0 && return 0
-	test "${CLICOLOR}" = "0" -o ! -z "${NO_COLOR}" && return 1
-	test -t 1 && return 0
+	[ -n "${NO_COLOR}" ] && return 1
+	[ -n "${CLICOLOR_FORCE}" ] && return 0
+	if test -t 1; then
+		[ -n "${CLICOLOR}" ] && return 0
+		[ "$1" = "default-off" ] && return 1
+		return 0
+	fi
 	return 1
 }
+
 TPUT=$(which tput)
 test -x "${TPUT}" && color_on || TPUT=true
 
