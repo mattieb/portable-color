@@ -21,9 +21,9 @@
 # SOFTWARE.
 #
 
-# color_on determines whether or not to try color. It is used by color_setup.
+# _try_color determines whether or not to try color. It is used by setup_color.
 
-color_on() {
+_try_color() {
 	[ -n "${NO_COLOR}" ] && return 1
 	[ -n "${CLICOLOR_FORCE}" ] && return 0
 	test -t 1 || return 1
@@ -32,45 +32,46 @@ color_on() {
 	return 0
 }
 
-# Call color_setup (optionally, with the "default-off" argument to indicate you
+# Call setup_color (optionally, with the "default-off" argument to indicate you
 # do not want to turn color on by default unless the user requests it via
 # environment variable) to set up the system. The environment variable TPUT
 # will be set to either the TPUT binary or true as a no-op.
 
-color_setup() {
-	TPUT=$(which tput 2>/dev/null) && color_on "$@" || TPUT=true
+setup_color() {
+	TPUT=$(which tput 2>/dev/null) && _try_color "$@" || TPUT=true
 }
 
 # To avoid printing errors in case unknown capabilities are tried, wrap tput
 # and discard errors.
 
-tput() {
+_qtput() {
+	[ -z "${TPUT}" ] && return 0
 	"${TPUT}" "$@" 2>/dev/null || true
 }
 
 # Write a capability and then write sgr0 to reset all. Most capabilities must
 # be reset this way.
 
-tput_wrap() {
+_twrap() {
 	output="$1"
 	shift
-	tput "$@"
+	_qtput "$@"
 	printf %s "$output"
-	tput sgr0
+	_qtput sgr0
 }
 
 # These capabilities requires sgr0 undo.
 
-bold() { tput_wrap "$1" bold; }
-black() { tput_wrap "$1" setaf 0; }
-red() { tput_wrap "$1" setaf 1; }
-green() { tput_wrap "$1" setaf 2; }
-yellow() { tput_wrap "$1" setaf 3; }
-blue() { tput_wrap "$1" setaf 4; }
-magenta() { tput_wrap "$1" setaf 5; }
-cyan() { tput_wrap "$1" setaf 6; }
-white() { tput_wrap "$1" setaf 7; }
+bold() { _twrap "$1" bold; }
+black() { _twrap "$1" setaf 0; }
+red() { _twrap "$1" setaf 1; }
+green() { _twrap "$1" setaf 2; }
+yellow() { _twrap "$1" setaf 3; }
+blue() { _twrap "$1" setaf 4; }
+magenta() { _twrap "$1" setaf 5; }
+cyan() { _twrap "$1" setaf 6; }
+white() { _twrap "$1" setaf 7; }
 
 # Standout has its own undo.
 
-standout() { tput smso; printf %s "$1"; tput rmso; }
+standout() { _qtput smso; printf %s "$1"; _qtput rmso; }

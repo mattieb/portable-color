@@ -3,9 +3,9 @@
 Describe "portable-color.sh"
     Include portable-color.sh
 
-    Describe "color_on"
+    Describe "_try_color"
         Parameters
-        #   tty N_C C_F CC  default-off color_on
+        #   tty N_C C_F CC  default-off _try_color
             tty ""  ""  ""  ""          success
             tty ""  ""  ""  default-off failure
             tty set ""  ""  ""          failure
@@ -40,7 +40,7 @@ Describe "portable-color.sh"
             not set set set default-off failure
         End
 
-        Example "$6 for $1, NO_COLOR=\"$2\", CLICOLOR_FORCE=\"$3\", CLICOLOR=\"$4\", color_on $5"
+        Example "$6 for $1, NO_COLOR=\"$2\", CLICOLOR_FORCE=\"$3\", CLICOLOR=\"$4\", _try_color $5"
             if [ "$1" = "tty" ]; then
                 test()
                 {
@@ -59,55 +59,55 @@ Describe "portable-color.sh"
             CLICOLOR_FORCE="$3"
             CLICOLOR="$4"
 
-            When run color_on "$5"
+            When run _try_color "$5"
             The status should be "$6"
         End 
     End
 
-    Describe "color_setup"
+    Describe "setup_color"
         It "uses \"true\" if tput cannot be found"
             which() {
                 echo "$1 not found"
                 return 1
             }
 
-            When call color_setup
+            When call setup_color
             The variable TPUT should equal "true"
 
         End
 
-        It "uses \"true\" if color_on returns failure"
-            color_on() {
+        It "uses \"true\" if _try_color returns failure"
+            _try_color() {
                 return 1
             }
 
-            When call color_setup
+            When call setup_color
             The variable TPUT should equal "true"
         End
 
-        It "uses found tput binary if color_on returns success"
+        It "uses found tput binary if _try_color returns success"
             which() {
                 echo /path/to/tput
             }
 
-            color_on() {
+            _try_color() {
                 return 0
             }
 
-            When call color_setup
+            When call setup_color
             The variable TPUT should equal "/path/to/tput"
         End
 
-        It "passes parameters to color_on"
+        It "passes parameters to _try_color"
             which() {
                 echo /path/to/tput
             }
 
-            color_on() {
+            _try_color() {
                 [ "$1" = "passed-param" ]
             }
 
-            When call color_setup passed-param
+            When call setup_color passed-param
             The variable TPUT should equal "/path/to/tput"
         End
     End
