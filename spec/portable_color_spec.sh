@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034,SC2317
 
 Describe "portable-color.sh"
     Include portable-color.sh
@@ -62,6 +62,54 @@ Describe "portable-color.sh"
             When run color_on "$5"
             The status should be "$6"
         End 
+    End
+
+    Describe "color_setup"
+        It "uses \"true\" if tput cannot be found"
+            which() {
+                echo "$1 not found"
+                return 1
+            }
+
+            When call color_setup
+            The variable TPUT should equal "true"
+
+        End
+
+        It "uses \"true\" if color_on returns failure"
+            color_on() {
+                return 1
+            }
+
+            When call color_setup
+            The variable TPUT should equal "true"
+        End
+
+        It "uses found tput binary if color_on returns success"
+            which() {
+                echo /path/to/tput
+            }
+
+            color_on() {
+                return 0
+            }
+
+            When call color_setup
+            The variable TPUT should equal "/path/to/tput"
+        End
+
+        It "passes parameters to color_on"
+            which() {
+                echo /path/to/tput
+            }
+
+            color_on() {
+                [ "$1" = "passed-param" ]
+            }
+
+            When call color_setup passed-param
+            The variable TPUT should equal "/path/to/tput"
+        End
     End
 
 End
