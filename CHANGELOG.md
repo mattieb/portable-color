@@ -8,6 +8,12 @@ The new portable-color will focus on better alignment with other tools, better c
 
 2.  Authors may choose to use a new "default-off" color mode, where their scripts will not use color unless "CLICOLOR" or "CLICOLOR_FORCE" is explicitly set, even if they would otherwise.
 
+3.  Color functions now take a single quoted string argument instead of trying to act like "echo". For example:
+
+```shell
+echo $(green "It's not easy being... you know.")
+```
+
 ## 1.0.0 - 2023-06-17
 
 Initial release.
