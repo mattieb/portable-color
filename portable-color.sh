@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 #
-# Copyright (c) 2023 Mattie Behrens.
+# Copyright (c) 2023, 2024 Mattie Behrens.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ setup_color() {
 # and discard errors.
 
 _qtput() {
-	[ -z "${TPUT}" ] && return 0
+	[ -z "${TPUT}" ] && return 0 # if not set up, don't do anything
 	"${TPUT}" "$@" 2>/dev/null || true
 }
 

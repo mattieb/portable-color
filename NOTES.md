@@ -26,6 +26,6 @@ but then also provides this example source code:
 >     color = false;
 > ```
 
-It seemed logical at the time to also run with this "0" or "1" thing to me, but on reflection (and observing the behavior of some tools, e.g. "brew"), I'm going to reverse course and just go by "is it set?" This also will simplify color configuration detection.
+It seemed logical at the time to me to also run with this "0" or "1" thing, but on reflection (and observing the behavior of some tools, e.g. "brew"), I'm going to reverse course and just go by "is it set?" This also will simplify color configuration detection.
 
 "NO_COLOR" should also take priority over "CLICOLOR_FORCE", which is again a change in behavior.
